@@ -48,7 +48,7 @@ export default class Protocol {
         this.history.forEach(item => {
             console.log(`Morty: Aww man, my ${item.counter} random value is ${item.mortyValue}`);
             console.log(`Morty: KEY${item.counter} = ${item.key}`);
-            console.log(`Morty: So the ${item.counter} fair number is (${item.mortyValue} + ${item.rickValue}) % ${item.range} = ${item.final}`)
+            console.log(`Morty: Uh, okay, the ${item.counter} fair number is (${item.mortyValue} + ${item.rickValue}) % ${item.range} = ${item.final}`)
         });
     }
 
