@@ -8,11 +8,11 @@ export default class Protocol {
         this.counter = 0;
     }
 
-    //the method of generating an honest number
-    async generate(range, description = ''){ 
+    // Метод генерации честного числа
+    async generate(range, description = '', ask = null) { 
         this.counter++;
         const key = crypto.randomBytes(32); 
-        let mortyValue = crypto.randomInt(0, range); //случайное число Morty
+        let mortyValue = crypto.randomInt(0, range); // Случайное число Morty
 
         const hmac = crypto.createHmac('sha3-256', key)
             .update(mortyValue.toString())
@@ -21,9 +21,12 @@ export default class Protocol {
         
         console.log(`Morty: HMAC${this.counter} = ${hmac}`);
 
-        const offer = `Morty: Rick, enter your number [0,${range})${description ? `, ${description}` : ' so you don’t whine later that I cheated, alright? '}`;
-
-        const rickInput = await new Promise(res => this.rl.question(offer + ' ', res));
+        let rickInput;
+        if (ask) {
+            rickInput = await ask(`Morty: Rick, enter your number [0,${range})${description ? `, ${description}` : ' so you don’t whine later that I cheated, alright? '}`);
+        } else {
+            rickInput = await new Promise(res => this.rl.question(`Morty: Rick, enter your number [0,${range})${description ? `, ${description}` : ' so you don’t whine later that I cheated, alright? '}` + ' ', res));
+        }
         const rickValue = parseInt(rickInput, 10);
 
         if (isNaN(rickValue) || rickValue < 0 || rickValue >= range) { 
@@ -39,7 +42,7 @@ export default class Protocol {
             final,
             key: key.toString('hex').toUpperCase(),
             range,
-        })
+        });
 
         return final;
     }
@@ -48,7 +51,7 @@ export default class Protocol {
         this.history.forEach(item => {
             console.log(`Morty: Aww man, my ${item.counter} random value is ${item.mortyValue}`);
             console.log(`Morty: KEY${item.counter} = ${item.key}`);
-            console.log(`Morty: Uh, okay, the ${item.counter} fair number is (${item.mortyValue} + ${item.rickValue}) % ${item.range} = ${item.final}`)
+            console.log(`Morty: Uh, okay, the ${item.counter} fair number is (${item.mortyValue} + ${item.rickValue}) % ${item.range} = ${item.final}`);
         });
     }
 

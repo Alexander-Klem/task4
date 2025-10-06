@@ -33,9 +33,9 @@ async function main() {
 
             const chosenInput = await ask(`Morty: Okay, okay, I hid the gun. What’s your guess [0,${args.boxCount})?`);
 
-            console.log('Morty: Let’s, uh, generate another value now, I mean, to select a box to keep in the game.');
-
-            const additionalInput = await generator.generate(args.boxCount - 1);
+            if (morty.constructor.name === 'ClassicMorty') {
+                console.log('Morty: Let’s, uh, generate another value now, I mean, to select a box to keep in the game.');
+            }
 
             const initialChosen = parseInt(chosenInput, 10);
 
@@ -44,7 +44,9 @@ async function main() {
                 continue;
             }
 
-            const additionalKept = await morty.decideKeptBoxes(initialChosen, prize, generator.generate.bind(generator));
+            const additionalKept = await (morty.constructor.name === 'ClassicMorty'
+                ? morty.decideKeptBoxes(initialChosen, prize, generator.generate.bind(generator), ask)
+                : morty.decideKeptBoxes(initialChosen, prize));
 
             let switched = false;
             let finalChosen = initialChosen;

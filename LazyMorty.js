@@ -13,11 +13,8 @@ export default class LazyMorty extends MortyBase {
         const allBoxes = [...Array(this.numOfBoxes).keys()];
         const unchosen = allBoxes.filter(i => i !== chosen);
 
-        let keepingBoxes;
-        if (prize === chosen) {
-            keepingBoxes = [unchosen.length > 0 ? unchosen[0] : chosen]
-        } keepingBoxes = [prize];
-
-        return keepingBoxes;
+        if (prize === chosen) return [unchosen[0]]
+        
+        return [prize];
     }
 }
